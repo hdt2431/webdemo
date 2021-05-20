@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hdt.auction.dao.ArtMapper">
+	<resultMap id="BaseResultMap" type="com.hdt.auction.entity.Art">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="art_name" property="art_name" jdbcType="VARCHAR" />
+		<result column="art_remark" property="art_remark" jdbcType="VARCHAR" />
+		<result column="art_desc" property="art_desc" jdbcType="VARCHAR" />
+		<result column="art_years" property="art_years" jdbcType="VARCHAR" />
+		<result column="start_time" property="start_time" jdbcType="TIMESTAMP" />
+		<result column="end_time" property="end_time" jdbcType="TIMESTAMP" />
+		<result column="init_price" property="init_price" jdbcType="DECIMAL" />
+		<result column="max_price" property="max_price" jdbcType="DECIMAL" />
+		<result column="owner_id" property="owner_id" jdbcType="BIGINT" />
+		<result column="bidtimes" property="bidtimes" jdbcType="INTEGER" />
+		<result column="winner_id" property="winner_id" jdbcType="BIGINT" />
+		<result column="arttype_id" property="arttype_id" jdbcType="BIGINT" />
+		<result column="state_id" property="state_id" jdbcType="BIGINT" />
+		<result column="gmt_create" property="gmt_create" jdbcType="TIMESTAMP" />
+		<result column="gmt_modified" property="gmt_modified" jdbcType="TIMESTAMP" />
+		<result column="rank" property="rank" jdbcType="VARCHAR" />
+		<result column="picture_url" property="picture_url" jdbcType="VARCHAR" />
+		<result column="heat" property="heat" jdbcType="INTEGER" />
+		<result column="is_audit" property="is_audit" jdbcType="TINYINT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, art_name, art_remark, art_desc, art_years, start_time, end_time,
+		init_price,
+		max_price, owner_id, bidtimes, winner_id, arttype_id, state_id, gmt_create,
+		gmt_modified,
+		rank, picture_url, heat,is_audit
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from art
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="listAllArt" resultMap="BaseResultMap" parameterType="com.hdt.auction.entity.Art">
+		select
+		<include refid="Base_Column_List" />
+		from art
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="getArtsByUserId" resultMap="BaseResultMap" parameterType="com.hdt.auction.entity.Art">
+		select
+		<include refid="Base_Column_List" />
+		from art
+			WHERE owner_id = #{id}
+	</select>
+	
+	<select id="getArtByTypeId" resultMap="BaseResultMap" parameterType="com.hdt.auction.entity.Art">
+		select
+		<include refid="Base_Column_List" />
+		from art
+		where arttype_id = #{arttype_id,jdbcType=BIGINT} and state_id = #{state_id,jdbcType=BIGINT}
+	</select>
+	<select id="getArtsBytype" resultMap="BaseResultMap" parameterType="com.hdt.auction.entity.Art">
+		select
+		<include refid="Base_Column_List" />
+		from art
+		where arttype_id = #{arttype_id,jdbcType=BIGINT}
+	</select>
+	<select id="getArtByuserIdAndstateId" resultMap="BaseResultMap" parameterType="com.hdt.auction.entity.Art">
+		select
+		<include refid="Base_Column_List" />
+		from art
+		where owner_id = #{user_id,jdbcType=BIGINT} and state_id = #{state_id,jdbcType=BIGINT}
+	</select>
+	<select id="getArtsByis_audit" resultMap="BaseResultMap" parameterType="com.hdt.auction.entity.Art">
+		select
+		<include refid="Base_Column_List" />
+		from art
+		where state_id = #{state_id,jdbcType=BIGINT}
+	</select>
+	<select id="getArtsByArtName" resultMap="BaseResultMap" parameterType="com.hdt.auction.entity.Art">
+		select
+		<include refid="Base_Column_List" />
+		from art
+			WHERE art_name LIKE "%"#{art_name,jdbcType=VARCHAR}"%"
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from art
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteBatch" parameterType="java.lang.Long">
+		delete from art
+		where id in
+    <foreach collection="list" item="idItem" open="(" separator="," close=")">
+    #{idItem}
+    </foreach>
+	</delete>
+	<insert id="insert" parameterType="com.hdt.auction.entity.Art">
+		insert into art (id, art_name, art_remark,
+		art_desc, art_years, start_time,
+		end_time, init_price, max_price,
+		owner_id, bidtimes, winner_id,
+		arttype_id, state_id, gmt_create,
+		gmt_modified, rank, picture_url,
+		heat,is_audit)
+		values (#{id,jdbcType=BIGINT}, #{art_name,jdbcType=VARCHAR},
+		#{art_remark,jdbcType=VARCHAR},
+		#{art_desc,jdbcType=VARCHAR}, #{art_years,jdbcType=VARCHAR}, #{start_time,jdbcType=TIMESTAMP},
+		#{end_time,jdbcType=TIMESTAMP}, #{init_price,jdbcType=DECIMAL},
+		#{max_price,jdbcType=DECIMAL},
+		#{owner_id,jdbcType=BIGINT}, #{bidtimes,jdbcType=INTEGER}, #{winner_id,jdbcType=BIGINT},
+		#{arttype_id,jdbcType=BIGINT}, #{state_id,jdbcType=BIGINT},
+		#{gmt_create,jdbcType=TIMESTAMP},
+		#{gmt_modified,jdbcType=TIMESTAMP}, #{rank,jdbcType=VARCHAR}, #{picture_url,jdbcType=VARCHAR},
+		#{heat,jdbcType=INTEGER},
+		#{is_audit,jdbcType=TINYINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.hdt.auction.entity.Art">
+		insert into art
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="art_name != null">
+				art_name,
+			</if>
+			<if test="art_remark != null">
+				art_remark,
+			</if>
+			<if test="art_desc != null">
+				art_desc,
+			</if>
+			<if test="art_years != null">
+				art_years,
+			</if>
+			<if test="start_time != null">
+				start_time,
+			</if>
+			<if test="end_time != null">
+				end_time,
+			</if>
+			<if test="init_price != null">
+				init_price,
+			</if>
+			<if test="max_price != null">
+				max_price,
+			</if>
+			<if test="owner_id != null">
+				owner_id,
+			</if>
+			<if test="bidtimes != null">
+				bidtimes,
+			</if>
+			<if test="winner_id != null">
+				winner_id,
+			</if>
+			<if test="arttype_id != null">
+				arttype_id,
+			</if>
+			<if test="state_id != null">
+				state_id,
+			</if>
+			<if test="gmt_create != null">
+				gmt_create,
+			</if>
+			<if test="gmt_modified != null">
+				gmt_modified,
+			</if>
+			<if test="rank != null">
+				rank,
+			</if>
+			<if test="picture_url != null">
+				picture_url,
+			</if>
+			<if test="heat != null">
+				heat,
+			</if>
+			<if test="is_audit != null">
+				is_audit,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="art_name != null">
+				#{art_name,jdbcType=VARCHAR},
+			</if>
+			<if test="art_remark != null">
+				#{art_remark,jdbcType=VARCHAR},
+			</if>
+			<if test="art_desc != null">
+				#{art_desc,jdbcType=VARCHAR},
+			</if>
+			<if test="art_years != null">
+				#{art_years,jdbcType=VARCHAR},
+			</if>
+			<if test="start_time != null">
+				#{start_time,jdbcType=TIMESTAMP},
+			</if>
+			<if test="end_time != null">
+				#{end_time,jdbcType=TIMESTAMP},
+			</if>
+			<if test="init_price != null">
+				#{init_price,jdbcType=DECIMAL},
+			</if>
+			<if test="max_price != null">
+				#{max_price,jdbcType=DECIMAL},
+			</if>
+			<if test="owner_id != null">
+				#{owner_id,jdbcType=BIGINT},
+			</if>
+			<if test="bidtimes != null">
+				#{bidtimes,jdbcType=INTEGER},
+			</if>
+			<if test="winner_id != null">
+				#{winner_id,jdbcType=BIGINT},
+			</if>
+			<if test="arttype_id != null">
+				#{arttype_id,jdbcType=BIGINT},
+			</if>
+			<if test="state_id != null">
+				#{state_id,jdbcType=BIGINT},
+			</if>
+			<if test="gmt_create != null">
+				#{gmt_create,jdbcType=TIMESTAMP},
+			</if>
+			<if test="gmt_modified != null">
+				#{gmt_modified,jdbcType=TIMESTAMP},
+			</if>
+			<if test="rank != null">
+				#{rank,jdbcType=VARCHAR},
+			</if>
+			<if test="picture_url != null">
+				#{picture_url,jdbcType=VARCHAR},
+			</if>
+			<if test="heat != null">
+				#{heat,jdbcType=INTEGER},
+			</if>
+			<if test="is_audit != null">
+				#{is_audit,jdbcType=TINYINT},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.hdt.auction.entity.Art">
+		update art
+		<set>
+			<if test="art_name != null">
+				art_name = #{art_name,jdbcType=VARCHAR},
+			</if>
+			<if test="art_remark != null">
+				art_remark = #{art_remark,jdbcType=VARCHAR},
+			</if>
+			<if test="art_desc != null">
+				art_desc = #{art_desc,jdbcType=VARCHAR},
+			</if>
+			<if test="art_years != null">
+				art_years = #{art_years,jdbcType=VARCHAR},
+			</if>
+			<if test="start_time != null">
+				start_time = #{start_time,jdbcType=TIMESTAMP},
+			</if>
+			<if test="end_time != null">
+				end_time = #{end_time,jdbcType=TIMESTAMP},
+			</if>
+			<if test="init_price != null">
+				init_price = #{init_price,jdbcType=DECIMAL},
+			</if>
+			<if test="max_price != null">
+				max_price = #{max_price,jdbcType=DECIMAL},
+			</if>
+			<if test="owner_id != null">
+				owner_id = #{owner_id,jdbcType=BIGINT},
+			</if>
+			<if test="bidtimes != null">
+				bidtimes = #{bidtimes,jdbcType=INTEGER},
+			</if>
+			<if test="winner_id != null">
+				winner_id = #{winner_id,jdbcType=BIGINT},
+			</if>
+			<if test="arttype_id != null">
+				arttype_id = #{arttype_id,jdbcType=BIGINT},
+			</if>
+			<if test="state_id != null">
+				state_id = #{state_id,jdbcType=BIGINT},
+			</if>
+			<if test="gmt_create != null">
+				gmt_create = #{gmt_create,jdbcType=TIMESTAMP},
+			</if>
+			<if test="gmt_modified != null">
+				gmt_modified = #{gmt_modified,jdbcType=TIMESTAMP},
+			</if>
+			<if test="rank != null">
+				rank = #{rank,jdbcType=VARCHAR},
+			</if>
+			<if test="picture_url != null">
+				picture_url = #{picture_url,jdbcType=VARCHAR},
+			</if>
+			<if test="heat != null">
+				heat = #{heat,jdbcType=INTEGER},
+			</if>
+			<if test="is_audit != null">
+				is_audit = #{is_audit,jdbcType=TINYINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.hdt.auction.entity.Art">
+		update art
+		set art_name = #{art_name,jdbcType=VARCHAR},
+		art_remark = #{art_remark,jdbcType=VARCHAR},
+		art_desc = #{art_desc,jdbcType=VARCHAR},
+		art_years = #{art_years,jdbcType=VARCHAR},
+		start_time = #{start_time,jdbcType=TIMESTAMP},
+		end_time = #{end_time,jdbcType=TIMESTAMP},
+		init_price = #{init_price,jdbcType=DECIMAL},
+		max_price = #{max_price,jdbcType=DECIMAL},
+		owner_id = #{owner_id,jdbcType=BIGINT},
+		bidtimes = #{bidtimes,jdbcType=INTEGER},
+		winner_id = #{winner_id,jdbcType=BIGINT},
+		arttype_id = #{arttype_id,jdbcType=BIGINT},
+		state_id = #{state_id,jdbcType=BIGINT},
+		gmt_create = #{gmt_create,jdbcType=TIMESTAMP},
+		gmt_modified = #{gmt_modified,jdbcType=TIMESTAMP},
+		rank = #{rank,jdbcType=VARCHAR},
+		picture_url = #{picture_url,jdbcType=VARCHAR},
+		heat = #{heat,jdbcType=INTEGER},
+		is_audit= #{is_audit,jdbcType=TINYINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

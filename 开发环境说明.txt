@@ -1,0 +1,10 @@
+本系统由eclipse平台开发
+	开发环境：
+		jdk 1.8
+		Tomcat 9.0
+		maven版本 3.3.2
+		MySQL 5.7.1
+	开发框架：
+		SSM框架
+		bootstrap3.3.7
+		layui2.3.0

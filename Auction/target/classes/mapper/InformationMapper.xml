@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hdt.auction.dao.InformationMapper" >
+  <resultMap id="BaseResultMap" type="com.hdt.auction.entity.Information" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="art_id" property="art_id" jdbcType="BIGINT" />
+    <result column="user_id" property="user_id" jdbcType="BIGINT" />
+    <result column="isread" property="isread" jdbcType="TINYINT" />
+    <result column="gmt_create" property="gmt_create" jdbcType="TIMESTAMP" />
+    <result column="gmt_modified" property="gmt_modified" jdbcType="TIMESTAMP" />
+    <result column="manager_id" property="manager_id" jdbcType="BIGINT" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.hdt.auction.entity.Information" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, art_id, user_id, isread, gmt_create, gmt_modified,manager_id,title
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from information
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="getInfoByuserId" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from information
+    where user_id = #{user_id,jdbcType=BIGINT}
+    ORDER BY gmt_create DESC
+  </select>
+  <select id="getInfoByis_audit" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Byte" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from information
+    where is_audit = #{is_audit,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from information
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteBatch" parameterType="java.lang.Long" >
+    delete from information
+    where id in
+    <foreach collection="list" item="idItem" open="(" separator="," close=")">
+    #{idItem}
+    </foreach>
+  </delete>
+  <insert id="insert" parameterType="com.hdt.auction.entity.Information" >
+    insert into information (id, art_id, user_id, 
+      isread, gmt_create, gmt_modified,manager_id,title, 
+      content)
+    values (#{id,jdbcType=BIGINT}, #{art_id,jdbcType=BIGINT}, #{user_id,jdbcType=BIGINT}, 
+      #{isread,jdbcType=TINYINT}, #{gmt_create,jdbcType=TIMESTAMP}, #{gmt_modified,jdbcType=TIMESTAMP}, 
+      #{content,jdbcType=LONGVARCHAR},#{manager_id,jdbcType=BIGINT},#{title,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hdt.auction.entity.Information" >
+    insert into information
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="art_id != null" >
+        art_id,
+      </if>
+      <if test="user_id != null" >
+        user_id,
+      </if>
+      <if test="isread != null" >
+        isread,
+      </if>
+      <if test="gmt_create != null" >
+        gmt_create,
+      </if>
+      <if test="gmt_modified != null" >
+        gmt_modified,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="manager_id != null" >
+        manager_id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="art_id != null" >
+        #{art_id,jdbcType=BIGINT},
+      </if>
+      <if test="user_id != null" >
+        #{user_id,jdbcType=BIGINT},
+      </if>
+      <if test="isread != null" >
+        #{isread,jdbcType=TINYINT},
+      </if>
+      <if test="gmt_create != null" >
+        #{gmt_create,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmt_modified != null" >
+        #{gmt_modified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="manager_id != null" >
+        #{manager_id,jdbcType=BIGINT},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hdt.auction.entity.Information" >
+    update information
+    <set >
+      <if test="art_id != null" >
+        art_id = #{art_id,jdbcType=BIGINT},
+      </if>
+      <if test="user_id != null" >
+        user_id = #{user_id,jdbcType=BIGINT},
+      </if>
+      <if test="isread != null" >
+        isread = #{isread,jdbcType=TINYINT},
+      </if>
+      <if test="gmt_create != null" >
+        gmt_create = #{gmt_create,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmt_modified != null" >
+        gmt_modified = #{gmt_modified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="manager_id != null" >
+        manager_id = #{manager_id,jdbcType=BIGINT},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hdt.auction.entity.Information" >
+    update information
+    set art_id = #{art_id,jdbcType=BIGINT},
+      user_id = #{user_id,jdbcType=BIGINT},
+      isread = #{isread,jdbcType=TINYINT},
+      gmt_create = #{gmt_create,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmt_modified,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=LONGVARCHAR},
+      manager_id = #{manager_id,jdbcType=BIGINT},
+      title = #{title,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hdt.auction.entity.Information" >
+    update information
+    set art_id = #{art_id,jdbcType=BIGINT},
+      user_id = #{user_id,jdbcType=BIGINT},
+      isread = #{isread,jdbcType=TINYINT},
+      gmt_create = #{gmt_create,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmt_modified,jdbcType=TIMESTAMP},
+      manager_id = #{manager_id,jdbcType=BIGINT},
+      title = #{title,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

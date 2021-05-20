@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hdt.auction.dao.BidMapper">
+	<resultMap id="BaseResultMap" type="com.hdt.auction.entity.Bid">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="bid_price" property="bid_price" jdbcType="DECIMAL" />
+		<result column="bid_date" property="bid_date" jdbcType="TIMESTAMP" />
+		<result column="art_id" property="art_id" jdbcType="BIGINT" />
+		<result column="user_id" property="user_id" jdbcType="BIGINT" />
+		<result column="gmt_create" property="gmt_create" jdbcType="TIMESTAMP" />
+		<result column="gmt_modified" property="gmt_modified" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, bid_price, bid_date, art_id, user_id, gmt_create, gmt_modified
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from bid
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="getbidByuser_id" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from bid
+		where user_id = #{user_id,jdbcType=BIGINT}
+	</select>
+	<select id="getArtByUserFromBid" resultType="java.lang.Long"
+		parameterType="java.lang.Long">
+		select	
+			distinct
+		art_id
+		from bid
+		where user_id = #{user_id,jdbcType=BIGINT}
+	</select>
+	<select id="getbidByart_id" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from bid
+		where art_id = #{art_id,jdbcType=BIGINT}
+		ORDER BY id DESC
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from bid
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="com.hdt.auction.entity.Bid">
+		insert into bid (id, bid_price, bid_date,
+		art_id, user_id, gmt_create,
+		gmt_modified)
+		values (#{id,jdbcType=BIGINT}, #{bid_price,jdbcType=DECIMAL},
+		#{bid_date,jdbcType=TIMESTAMP},
+		#{art_id,jdbcType=BIGINT}, #{user_id,jdbcType=BIGINT}, #{gmt_create,jdbcType=TIMESTAMP},
+		#{gmt_modified,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective" parameterType="com.hdt.auction.entity.Bid">
+		insert into bid
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="bid_price != null">
+				bid_price,
+			</if>
+			<if test="bid_date != null">
+				bid_date,
+			</if>
+			<if test="art_id != null">
+				art_id,
+			</if>
+			<if test="user_id != null">
+				user_id,
+			</if>
+			<if test="gmt_create != null">
+				gmt_create,
+			</if>
+			<if test="gmt_modified != null">
+				gmt_modified,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="bid_price != null">
+				#{bid_price,jdbcType=DECIMAL},
+			</if>
+			<if test="bid_date != null">
+				#{bid_date,jdbcType=TIMESTAMP},
+			</if>
+			<if test="art_id != null">
+				#{art_id,jdbcType=BIGINT},
+			</if>
+			<if test="user_id != null">
+				#{user_id,jdbcType=BIGINT},
+			</if>
+			<if test="gmt_create != null">
+				#{gmt_create,jdbcType=TIMESTAMP},
+			</if>
+			<if test="gmt_modified != null">
+				#{gmt_modified,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.hdt.auction.entity.Bid">
+		update bid
+		<set>
+			<if test="bid_price != null">
+				bid_price = #{bid_price,jdbcType=DECIMAL},
+			</if>
+			<if test="bid_date != null">
+				bid_date = #{bid_date,jdbcType=TIMESTAMP},
+			</if>
+			<if test="art_id != null">
+				art_id = #{art_id,jdbcType=BIGINT},
+			</if>
+			<if test="user_id != null">
+				user_id = #{user_id,jdbcType=BIGINT},
+			</if>
+			<if test="gmt_create != null">
+				gmt_create = #{gmt_create,jdbcType=TIMESTAMP},
+			</if>
+			<if test="gmt_modified != null">
+				gmt_modified = #{gmt_modified,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.hdt.auction.entity.Bid">
+		update bid
+		set bid_price = #{bid_price,jdbcType=DECIMAL},
+		bid_date = #{bid_date,jdbcType=TIMESTAMP},
+		art_id = #{art_id,jdbcType=BIGINT},
+		user_id = #{user_id,jdbcType=BIGINT},
+		gmt_create = #{gmt_create,jdbcType=TIMESTAMP},
+		gmt_modified = #{gmt_modified,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

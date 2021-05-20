@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hdt.auction.dao.OrderMapper">
+	<resultMap id="BaseResultMap" type="com.hdt.auction.entity.Order">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="art_id" jdbcType="BIGINT" property="artId" />
+		<result column="buyer_id" jdbcType="BIGINT" property="buyerId" />
+		<result column="seller_id" jdbcType="BIGINT" property="sellerId" />
+		<result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+		<result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+		<result column="adress_id" jdbcType="BIGINT" property="adressId" />
+		<result column="order_type_id" jdbcType="BIGINT" property="orderTypeId" />
+		<result column="delivery_status_id" jdbcType="BIGINT" property="deliveryStatusId" />
+		<result column="logistics_company" jdbcType="VARCHAR" property="logisticsCompany" />
+		<result column="logistics_number" jdbcType="VARCHAR" property="logisticsNumber" />
+		<result column="comment" jdbcType="VARCHAR" property="comment" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, art_id, buyer_id, seller_id, start_time, end_time, adress_id,
+		order_type_id,
+		delivery_status_id, logistics_company, logistics_number, comment
+	</sql>
+	<select id="getAllOrder" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from `order`
+		
+	</select>
+	<select id="getOrderByDeliveryStatusId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from `order`
+		where delivery_status_id = #{id,jdbcType=BIGINT}
+		
+	</select>
+	<select id="getOrderByOrderTypeId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from `order`
+		where order_type_id = #{id,jdbcType=BIGINT}		
+	</select>
+	<select id="getOrderByBuyerId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from `order`
+		where buyer_id = #{id,jdbcType=BIGINT}		
+	</select>
+	<select id="getOrderByBuyerIdandTypeId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from `order`
+		where buyer_id = #{id,jdbcType=BIGINT} and order_type_id = #{typeid,jdbcType=BIGINT}		
+	</select>
+	<select id="getOrderBySellerId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from `order`
+		where seller_id = #{id,jdbcType=BIGINT}		
+	</select>
+	<select id="getOrderBySellerIdandTypeId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from `order`
+		where seller_id = #{id,jdbcType=BIGINT} and order_type_id = #{typeid,jdbcType=BIGINT}
+		
+	</select>
+	<select id="selectByExample" parameterType="com.hdt.auction.entity.OrderExample"
+		resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from `order`
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from `order`
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="selectByArtId" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from `order`
+		where art_id = #{art_id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from `order`
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteOrderBatch" parameterType="java.lang.Long">
+		delete from `order`
+		where id in
+    <foreach collection="list" item="idItem" open="(" separator="," close=")">
+    #{idItem}
+    </foreach>
+	</delete>
+	<delete id="deleteByExample" parameterType="com.hdt.auction.entity.OrderExample">
+		delete from `order`
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.hdt.auction.entity.Order">
+		insert into `order` (id, art_id, buyer_id,
+		seller_id, start_time, end_time,
+		adress_id, order_type_id, delivery_status_id,
+		logistics_company, logistics_number, comment
+		)
+		values (#{id,jdbcType=BIGINT}, #{artId,jdbcType=BIGINT},
+		#{buyerId,jdbcType=BIGINT},
+		#{sellerId,jdbcType=BIGINT}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP},
+		#{adressId,jdbcType=BIGINT}, #{orderTypeId,jdbcType=BIGINT},
+		#{deliveryStatusId,jdbcType=BIGINT},
+		#{logisticsCompany,jdbcType=VARCHAR},
+		#{logisticsNumber,jdbcType=VARCHAR}, #{comment,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.hdt.auction.entity.Order">
+		insert into `order`
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="artId != null">
+				art_id,
+			</if>
+			<if test="buyerId != null">
+				buyer_id,
+			</if>
+			<if test="sellerId != null">
+				seller_id,
+			</if>
+			<if test="startTime != null">
+				start_time,
+			</if>
+			<if test="endTime != null">
+				end_time,
+			</if>
+			<if test="adressId != null">
+				adress_id,
+			</if>
+			<if test="orderTypeId != null">
+				order_type_id,
+			</if>
+			<if test="deliveryStatusId != null">
+				delivery_status_id,
+			</if>
+			<if test="logisticsCompany != null">
+				logistics_company,
+			</if>
+			<if test="logisticsNumber != null">
+				logistics_number,
+			</if>
+			<if test="comment != null">
+				comment,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="artId != null">
+				#{artId,jdbcType=BIGINT},
+			</if>
+			<if test="buyerId != null">
+				#{buyerId,jdbcType=BIGINT},
+			</if>
+			<if test="sellerId != null">
+				#{sellerId,jdbcType=BIGINT},
+			</if>
+			<if test="startTime != null">
+				#{startTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				#{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="adressId != null">
+				#{adressId,jdbcType=BIGINT},
+			</if>
+			<if test="orderTypeId != null">
+				#{orderTypeId,jdbcType=BIGINT},
+			</if>
+			<if test="deliveryStatusId != null">
+				#{deliveryStatusId,jdbcType=BIGINT},
+			</if>
+			<if test="logisticsCompany != null">
+				#{logisticsCompany,jdbcType=VARCHAR},
+			</if>
+			<if test="logisticsNumber != null">
+				#{logisticsNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="comment != null">
+				#{comment,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.hdt.auction.entity.OrderExample"
+		resultType="java.lang.Long">
+		select count(*) from `order`
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update `order`
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.artId != null">
+				art_id = #{record.artId,jdbcType=BIGINT},
+			</if>
+			<if test="record.buyerId != null">
+				buyer_id = #{record.buyerId,jdbcType=BIGINT},
+			</if>
+			<if test="record.sellerId != null">
+				seller_id = #{record.sellerId,jdbcType=BIGINT},
+			</if>
+			<if test="record.startTime != null">
+				start_time = #{record.startTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.endTime != null">
+				end_time = #{record.endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.adressId != null">
+				adress_id = #{record.adressId,jdbcType=BIGINT},
+			</if>
+			<if test="record.orderTypeId != null">
+				order_type_id = #{record.orderTypeId,jdbcType=BIGINT},
+			</if>
+			<if test="record.deliveryStatusId != null">
+				delivery_status_id = #{record.deliveryStatusId,jdbcType=BIGINT},
+			</if>
+			<if test="record.logisticsCompany != null">
+				logistics_company = #{record.logisticsCompany,jdbcType=VARCHAR},
+			</if>
+			<if test="record.logisticsNumber != null">
+				logistics_number = #{record.logisticsNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="record.comment != null">
+				comment = #{record.comment,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update `order`
+		set id = #{record.id,jdbcType=BIGINT},
+		art_id = #{record.artId,jdbcType=BIGINT},
+		buyer_id = #{record.buyerId,jdbcType=BIGINT},
+		seller_id = #{record.sellerId,jdbcType=BIGINT},
+		start_time = #{record.startTime,jdbcType=TIMESTAMP},
+		end_time = #{record.endTime,jdbcType=TIMESTAMP},
+		adress_id = #{record.adressId,jdbcType=BIGINT},
+		order_type_id = #{record.orderTypeId,jdbcType=BIGINT},
+		delivery_status_id = #{record.deliveryStatusId,jdbcType=BIGINT},
+		logistics_company = #{record.logisticsCompany,jdbcType=VARCHAR},
+		logistics_number = #{record.logisticsNumber,jdbcType=VARCHAR},
+		comment = #{record.comment,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.hdt.auction.entity.Order">
+		update `order`
+		<set>
+			<if test="artId != null">
+				art_id = #{artId,jdbcType=BIGINT},
+			</if>
+			<if test="buyerId != null">
+				buyer_id = #{buyerId,jdbcType=BIGINT},
+			</if>
+			<if test="sellerId != null">
+				seller_id = #{sellerId,jdbcType=BIGINT},
+			</if>
+			<if test="startTime != null">
+				start_time = #{startTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				end_time = #{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="adressId != null">
+				adress_id = #{adressId,jdbcType=BIGINT},
+			</if>
+			<if test="orderTypeId != null">
+				order_type_id = #{orderTypeId,jdbcType=BIGINT},
+			</if>
+			<if test="deliveryStatusId != null">
+				delivery_status_id = #{deliveryStatusId,jdbcType=BIGINT},
+			</if>
+			<if test="logisticsCompany != null">
+				logistics_company = #{logisticsCompany,jdbcType=VARCHAR},
+			</if>
+			<if test="logisticsNumber != null">
+				logistics_number = #{logisticsNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="comment != null">
+				comment = #{comment,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.hdt.auction.entity.Order">
+		update `order`
+		set art_id = #{artId,jdbcType=BIGINT},
+		buyer_id = #{buyerId,jdbcType=BIGINT},
+		seller_id = #{sellerId,jdbcType=BIGINT},
+		start_time = #{startTime,jdbcType=TIMESTAMP},
+		end_time = #{endTime,jdbcType=TIMESTAMP},
+		adress_id = #{adressId,jdbcType=BIGINT},
+		order_type_id = #{orderTypeId,jdbcType=BIGINT},
+		delivery_status_id = #{deliveryStatusId,jdbcType=BIGINT},
+		logistics_company = #{logisticsCompany,jdbcType=VARCHAR},
+		logistics_number = #{logisticsNumber,jdbcType=VARCHAR},
+		comment = #{comment,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

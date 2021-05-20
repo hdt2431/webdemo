@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hdt.auction.dao.ManagerMapper" >
+  <resultMap id="BaseResultMap" type="com.hdt.auction.entity.Manager" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="manager_name" property="manager_name" jdbcType="VARCHAR" />
+    <result column="manager_password" property="manager_password" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmt_create" jdbcType="TIMESTAMP" />
+    <result column="gmt_modified" property="gmt_modified" jdbcType="TIMESTAMP" />
+    <result column="authority" property="authority" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, manager_name, manager_password, gmt_create, gmt_modified, authority
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from manager
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="findManagerByAuthority" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from manager
+    where authority = #{authority,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from manager
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteBatch" parameterType="java.lang.Long" >
+    delete from manager
+    where id in
+    <foreach collection="list" item="idItem" open="(" separator="," close=")">
+    #{idItem}
+    </foreach>
+  </delete>
+  <insert id="insert" parameterType="com.hdt.auction.entity.Manager" >
+    insert into manager (id, manager_name, manager_password, 
+      gmt_create, gmt_modified, authority
+      )
+    values (#{id,jdbcType=BIGINT}, #{manager_name,jdbcType=VARCHAR}, #{manager_password,jdbcType=VARCHAR}, 
+      #{gmt_create,jdbcType=TIMESTAMP}, #{gmt_modified,jdbcType=TIMESTAMP}, #{authority,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hdt.auction.entity.Manager" >
+    insert into manager
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="manager_name != null" >
+        manager_name,
+      </if>
+      <if test="manager_password != null" >
+        manager_password,
+      </if>
+      <if test="gmt_create != null" >
+        gmt_create,
+      </if>
+      <if test="gmt_modified != null" >
+        gmt_modified,
+      </if>
+      <if test="authority != null" >
+        authority,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="manager_name != null" >
+        #{manager_name,jdbcType=VARCHAR},
+      </if>
+      <if test="manager_password != null" >
+        #{manager_password,jdbcType=VARCHAR},
+      </if>
+      <if test="gmt_create != null" >
+        #{gmt_create,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmt_modified != null" >
+        #{gmt_modified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="authority != null" >
+        #{authority,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hdt.auction.entity.Manager" >
+    update manager
+    <set >
+      <if test="manager_name != null" >
+        manager_name = #{manager_name,jdbcType=VARCHAR},
+      </if>
+      <if test="manager_password != null" >
+        manager_password = #{manager_password,jdbcType=VARCHAR},
+      </if>
+      <if test="gmt_create != null" >
+        gmt_create = #{gmt_create,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmt_modified != null" >
+        gmt_modified = #{gmt_modified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="authority != null" >
+        authority = #{authority,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hdt.auction.entity.Manager" >
+    update manager
+    set manager_name = #{manager_name,jdbcType=VARCHAR},
+      manager_password = #{manager_password,jdbcType=VARCHAR},
+      gmt_create = #{gmt_create,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmt_modified,jdbcType=TIMESTAMP},
+      authority = #{authority,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="findManagerByNameAndPwd"  parameterType="com.hdt.auction.entity.Manager"  resultMap="BaseResultMap">  
+        select 
+        <include refid="Base_Column_List" />
+        from manager 
+        where manager_name=#{manager_name} and manager_password=#{manager_password}  
+    </select> 
+</mapper>

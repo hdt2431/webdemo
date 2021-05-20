@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hdt.auction.dao.ReviewMapper" >
+  <resultMap id="BaseResultMap" type="com.hdt.auction.entity.Review" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="buyer_id" property="buyer_id" jdbcType="BIGINT" />
+    <result column="saler_id" property="saler_id" jdbcType="BIGINT" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+    <result column="rate" property="rate" jdbcType="INTEGER" />
+    <result column="gmt_create" property="gmt_create" jdbcType="TIMESTAMP" />
+    <result column="gmt_modified" property="gmt_modified" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.hdt.auction.entity.Review" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, buyer_id, saler_id, time, rate, gmt_create, gmt_modified
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from review
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from review
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.hdt.auction.entity.Review" >
+    insert into review (id, buyer_id, saler_id, 
+      time, rate, gmt_create, 
+      gmt_modified, content)
+    values (#{id,jdbcType=BIGINT}, #{buyer_id,jdbcType=BIGINT}, #{saler_id,jdbcType=BIGINT}, 
+      #{time,jdbcType=TIMESTAMP}, #{rate,jdbcType=INTEGER}, #{gmt_create,jdbcType=TIMESTAMP}, 
+      #{gmt_modified,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hdt.auction.entity.Review" >
+    insert into review
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="buyer_id != null" >
+        buyer_id,
+      </if>
+      <if test="saler_id != null" >
+        saler_id,
+      </if>
+      <if test="time != null" >
+        time,
+      </if>
+      <if test="rate != null" >
+        rate,
+      </if>
+      <if test="gmt_create != null" >
+        gmt_create,
+      </if>
+      <if test="gmt_modified != null" >
+        gmt_modified,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="buyer_id != null" >
+        #{buyer_id,jdbcType=BIGINT},
+      </if>
+      <if test="saler_id != null" >
+        #{saler_id,jdbcType=BIGINT},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rate != null" >
+        #{rate,jdbcType=INTEGER},
+      </if>
+      <if test="gmt_create != null" >
+        #{gmt_create,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmt_modified != null" >
+        #{gmt_modified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hdt.auction.entity.Review" >
+    update review
+    <set >
+      <if test="buyer_id != null" >
+        buyer_id = #{buyer_id,jdbcType=BIGINT},
+      </if>
+      <if test="saler_id != null" >
+        saler_id = #{saler_id,jdbcType=BIGINT},
+      </if>
+      <if test="time != null" >
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rate != null" >
+        rate = #{rate,jdbcType=INTEGER},
+      </if>
+      <if test="gmt_create != null" >
+        gmt_create = #{gmt_create,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmt_modified != null" >
+        gmt_modified = #{gmt_modified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hdt.auction.entity.Review" >
+    update review
+    set buyer_id = #{buyer_id,jdbcType=BIGINT},
+      saler_id = #{saler_id,jdbcType=BIGINT},
+      time = #{time,jdbcType=TIMESTAMP},
+      rate = #{rate,jdbcType=INTEGER},
+      gmt_create = #{gmt_create,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmt_modified,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hdt.auction.entity.Review" >
+    update review
+    set buyer_id = #{buyer_id,jdbcType=BIGINT},
+      saler_id = #{saler_id,jdbcType=BIGINT},
+      time = #{time,jdbcType=TIMESTAMP},
+      rate = #{rate,jdbcType=INTEGER},
+      gmt_create = #{gmt_create,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmt_modified,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
